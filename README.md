@@ -25,8 +25,9 @@ Real-time, camera-driven, system-wide privacy shield using **CameraX + ML Kit**.
 5. The app will monitor and protect your screen
 
 ## Current Status
-- 🚧 Initial setup in progress
-- 📋 Next: Full camera + ML integration
+- ✅ Full CameraX + ML Kit integration
+- ✅ Auto-start on boot supported (BootReceiver)
+- 📋 Next: Polish + testing
 
 ## License
 MIT — privacy-first, open source.
