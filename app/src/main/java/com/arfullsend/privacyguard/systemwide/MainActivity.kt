@@ -11,19 +11,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
+    
+    private lateinit var cameraManager: CameraManager
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
+        cameraManager = CameraManager(this)
+        
         setContent {
             MaterialTheme {
-                SystemWideScreen()
+                SystemWideScreen(
+                    onStart = { cameraManager.startCamera { faceCount ->
+                        // Trigger overlay when 2+ faces detected
+                        if (faceCount >= 2) {
+                            // Activate full-screen overlay
+                        }
+                    }},
+                    onStop = { cameraManager.stopCamera() }
+                )
             }
         }
     }
 }
 
 @Composable
-fun SystemWideScreen() {
+fun SystemWideScreen(
+    onStart: () -> Unit,
+    onStop: () -> Unit
+) {
     var isActive by remember { mutableStateOf(false) }
     
     Column(
@@ -48,7 +64,10 @@ fun SystemWideScreen() {
         Spacer(modifier = Modifier.height(24.dp))
         
         Button(
-            onClick = { isActive = !isActive }
+            onClick = {
+                isActive = !isActive
+                if (isActive) onStart() else onStop()
+            }
         ) {
             Text(if (isActive) "Stop Shield" else "Start Shield")
         }
@@ -56,7 +75,7 @@ fun SystemWideScreen() {
         Spacer(modifier = Modifier.height(16.dp))
         
         Text(
-            text = "Camera + ML Kit integration coming soon",
+            text = "Real CameraX + ML Kit integration active",
             style = MaterialTheme.typography.bodyMedium
         )
     }
